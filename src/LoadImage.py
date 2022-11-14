@@ -17,6 +17,10 @@ def load_data(path):
     TrainingdataFrame = pd.DataFrame(columns=['Image', 'Label'])
     TestdataFrame = pd.DataFrame(columns=['Image'])
 
+    TrainingDataImages = np.empty((0, 28, 28))
+    TrainingDataLabels = np.empty((0, 1))
+    TestDataImages = np.empty((0, 28, 28))
+
     TrainingPath = path + '/asl_alphabet_train/asl_alphabet_train/'
     TestPath = path + '/asl_alphabet_test/asl_alphabet_test/'
 
@@ -32,8 +36,10 @@ def load_data(path):
         #print("images in class ", NumberOfClasses[i], " are ", Images)
         for j in range(len(Images)):
             img = cv2.imread(TrainingPath + NumberOfClasses[i] + '/' + Images[j], 0)
-            img = cv2.resize(img, (64, 64))
-            TrainingdataFrame = TrainingdataFrame.append({'Image': img, 'Label': i}, ignore_index=True)
+            img = cv2.resize(img, (28, 28))
+            #print("img.shape", img.shape)
+            TrainingDataImages = np.vstack((TrainingDataImages, np.array([img])))
+            TrainingDataLabels = np.vstack((TrainingDataLabels, np.array([i])))
 
     ClassPath = TestPath
     Images = os.listdir(ClassPath)
@@ -42,20 +48,19 @@ def load_data(path):
         # print("image name ", Images[j])
         # print("image path ", TestPath + Images[j])
         img = cv2.imread(TestPath + Images[j], 0)
-        img = cv2.resize(img, (64, 64))
-        TestdataFrame = TestdataFrame.append({'Image': img}, ignore_index=True)
+        img = cv2.resize(img, (28, 28))
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        TestDataImages = np.vstack((TestDataImages, np.array([img])))
 
-    return TrainingdataFrame, TestdataFrame
+    return TrainingDataImages, TrainingDataLabels, TestDataImages
 
 # Main function
 if __name__ == '__main__':
     path = '/Users/anushsriramramesh/Downloads/archive'
-    TrainingdataFrame, TestdataFrame = load_data(path)
+    TrainingdataImages, TrainLabels,TestDataImages = load_data(path)
 
-    trainingDataImages = np.array(TrainingdataFrame['Image'])
-    print("trainingDataImages shape ", trainingDataImages.shape)
-    print(TrainingdataFrame)
-    print(TestdataFrame)
+    print("Training data shape ", TrainingdataImages.shape)
+    print("Training labels shape ", TrainLabels.shape)
+    print("Test data shape ", TestDataImages.shape)
 
-    TrainingdataFrame.to_csv('TrainingdataFrame.csv')
-    TestdataFrame.to_csv('TestdataFrame.csv')
+
