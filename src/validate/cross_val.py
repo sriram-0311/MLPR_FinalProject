@@ -6,7 +6,7 @@ from sklearn.datasets import load_iris
 iris_data = load_iris()
 dt_clf = DecisionTreeClassifier(random_state=156)
 
-# iris data for testing the code.
+# TODO: change iris data to our image data pre-processed. 
 data = iris_data.data
 label = iris_data.target
 
