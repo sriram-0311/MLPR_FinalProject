@@ -1,2 +1,3 @@
-ScreenShot: cross validation using sciket learn API and Iris sample images.
+ScreenShot: cross validation using Naive-Baysian and Logistic-regression with sign language sample images. <br />
+
 ![Cross Validation using sciket.](./img/cv.png)
