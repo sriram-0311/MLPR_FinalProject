@@ -22,8 +22,8 @@ Plot showing the closeness between predicted values and actual values of cluster
 ![Forgy algorithm](./Forgy.png)
 
 Plot showing the closeness between predicted values and actual values of clusters for Llyod algorithm
-![Llyod algorithm](./img/Llyod.png)
+![Llyod algorithm](./Llyod.png)
 
 Plot showing the closeness between predicted values and actual values of clusters for Hartigan-Wong algorithm
-![Hartigan-Wong algorithm](./img/Hartigan-Wong.png)
+![Hartigan-Wong algorithm](./Hartigan-Wong.png)
 
