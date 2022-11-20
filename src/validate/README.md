@@ -1,7 +1,7 @@
 [Quantatitive value of prediction accuracy using KMeans for clustering analysis]
 ================================================================================
 0.696458449525934
-<B>"Prediction Accuracy is 69.65 %"
+<B>"Prediction Accuracy is 69.65 %"</B>
 
 
 IMPLEMENTATION OF K-MEANS ALOGORITHM :
@@ -17,3 +17,13 @@ kmeans(x, centers, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Ll
 -algorithm : The algorithm to be used. It should be one of "Hartigan-Wong", "Lloyd", "Forgy" or "MacQueen".
 
 
+[Plot of each KMeans Algorithm]========================================
+Plot showing the closeness between predicted values and actual values of clusters for Forgy algorithm
+
+![Forgy algorithm.](./img/Forgy algorithm.png)
+
+Plot showing the closeness between predicted values and actual values of clusters for Llyod algorithm
+![Llyod algorithm.](./img/Llyod algorithm.png)
+
+Plot showing the closeness between predicted values and actual values of clusters for Hartigan-Wong algorithm
+![Hartigan-Wong algorithm.](./img/Hartigan-Wong algorithm.png)
