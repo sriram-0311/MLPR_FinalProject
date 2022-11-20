@@ -26,3 +26,5 @@ Plot showing the closeness between predicted values and actual values of cluster
 
 Plot showing the closeness between predicted values and actual values of clusters for Hartigan-Wong algorithm
 ![Hartigan-Wong algorithm](./img/Hartigan-Wong algorithm.png)
+
+![Cross Validation using sciket.](./img/cv.png)
