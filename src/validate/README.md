@@ -19,7 +19,7 @@ kmeans(x, centers, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Ll
 
 [Plot of each KMeans Algorithm]========================================
 Plot showing the closeness between predicted values and actual values of clusters for Forgy algorithm
-![Forgy algorithm](./img/Forgy algorithm.png)
+![Forgy algorithm](./Forgy.png)
 
 Plot showing the closeness between predicted values and actual values of clusters for Llyod algorithm
 ![Llyod algorithm](./img/Llyod algorithm.png)
