@@ -1,3 +1,4 @@
-ScreenShot: cross validation using Naive-Baysian and Logistic-regression with sign language sample images. <br />
-
-![Cross Validation using sciket.](./img/cv.png)
+[Quantatitive value of prediction accuracy using KMeans for clustering analysis]
+================================================================================
+0.696458449525934
+"Prediction Accuracy is 69.65 %"
