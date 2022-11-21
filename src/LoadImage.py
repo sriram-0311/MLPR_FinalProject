@@ -109,6 +109,10 @@ if __name__ == '__main__':
     print(train_data)
     print(train_data.class_names)
     image_batch, label_batch = next(iter(train_data))
+    trainData = image_batch.numpy()
+    trainLabel = label_batch.numpy()
+    print("trainData shape ", trainData.shape)
+    print("trainLabel shape ", trainLabel.shape)
     print(image_batch.shape)
     print(label_batch.shape)
 
