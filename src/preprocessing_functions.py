@@ -2,26 +2,61 @@
 import cv2
 import pandas as pd
 import numpy as np
+from sklearn import tree
+from sklearn import datasets
+import matplotlib.pyplot as plt
+import LoadImage
+import os
+import pickle
+import tensorflow as tf
+from sklearn.model_selection import train_test_split,cross_val_score, GridSearchCV
 
-# Read image from csv file
-def read_image_from_csv(csv_file):
-    # Read csv file
-    df = pd.read_csv(csv_file)
-    # get each image from the csv file
-    images = df['Image']
-    print("images :", images[0][0])
-    arrayformed = np.fromstring(images[0], dtype=int, sep=' ').reshape(64,64)
-    print("array formed ",arrayformed)
-    # convert each image to numpy array
-    images = [np.fromstring(image, dtype=int, sep='\n') for image in images]
-    print("images shape ", np.array(images).shape)
-    print("images ", images[0])
-    # Convert string to numpy array
-    df['Image'] = df['Image'].apply(lambda x: np.fromstring(x, dtype=int, sep=' '))
-    # Reshape image
-    #df['Image'] = df['Image'].apply(lambda x: x.reshape(64,64))
-    return df
+# draw decision tree for training data
+def draw_decision_tree(X, y):
+    clf = tree.DecisionTreeClassifier()
+    clf = clf.fit(X, y)
+    tree.plot_tree(clf)
+    #plt.show()
+    # save decision tree as pdf
+    tree.export_graphviz(clf, out_file='tree.dot')
+    # convert dot file to pdf
+    os.system('dot -Tpdf tree.dot -o tree.pdf')
+    # save the model to disk
+    filename = 'finalized_model.sav'
+    pickle.dump(clf, open(filename, 'wb'))
+    print(" number of nodes in tree : ", clf.tree_.node_count)
+    print(" number of nodes in tree : ", clf.tree_.max_depth)
 
+# load model and predict
+def load_model_predict(X_test):
+    # load the model from disk
+    loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
+    result = loaded_model.predict(X_test)
+    return result
+
+# prune the tree using cross validation score
+def prune_tree(X, y):
+    # create a list of values to try for max_depth:
+    max_depth_range = list(range(1, 10))
+    # list to store the average RMSE for each value of max_depth:
+    accuracy = []
+    for depth in max_depth_range:
+        print("depth : ", depth)
+        clf = tree.DecisionTreeClassifier(max_depth=depth, random_state=1)
+        scores = cross_val_score(clf, X, y, cv=10, scoring='accuracy')
+        accuracy.append(scores.mean())
+    plt.plot(max_depth_range, accuracy)
+    plt.xlabel('max_depth')
+    plt.ylabel('accuracy')
+    plt.show()
+
+# calculate accuracy of the model
+def calculate_accuracy(y_test, y_pred):
+    count = 0
+    for i in range(len(y_test)):
+        if y_test[i] == y_pred[i]:
+            count += 1
+    print("Accuracy of the model is : ", count / len(y_test))
 # def regularization()
 
 # def PCA()
@@ -42,7 +77,7 @@ def read_image_from_csv(csv_file):
 def blob_detection(im):
     # Set up the detector with default parameters.
     detector = cv2.SimpleBlobDetector()
-    
+
     # Detect blobs.
     keypoints = detector.detect(im)
     return keypoints
@@ -51,16 +86,32 @@ def plot_image(img):
     cv2.imshow('Black white image', img)
     # cv2.imshow('Original image',originalImage)
     # cv2.imshow('Gray image', grayImage)
-    
+
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     # Read image from csv file
-    df = read_image_from_csv('TrainingdataFrame.csv')
+    # df = read_image_from_csv('TrainingdataFrame.csv')
+    # load data from path
+    path = '/Users/anushsriramramesh/Downloads/archive/asl_alphabet_train/asl_alphabet_train'
+    Trainingdata, TrainingdataLabel = LoadImage.load_data_tf(path)
+    # split data into training and testing
+    X_train, X_test, y_train, y_test = train_test_split(Trainingdata, TrainingdataLabel, test_size=0.2, random_state=42)
+    # decision tree
+    #draw_decision_tree(X_train, y_train)
+
+    # prune tree
+    prune_tree(X_train, y_train)
+
+    # load model and predict
+    y_pred = load_model_predict(X_test)
+    #calculate accuracy
+    calculate_accuracy(y_test, y_pred)
+
     # Show a random image
-    img = df['Image'][np.random.randint(0,len(df['Image']))]
+    # img = df['Image'][np.random.randint(0,len(df['Image']))]
     # img = threshold_image(img)
-    keypoints = blob_detection(img)
-    print(keypoints)
-    plot_image(img)
+    # keypoints = blob_detection(img)
+    # print(keypoints)
+    # plot_image(img)

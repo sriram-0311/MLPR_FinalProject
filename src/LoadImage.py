@@ -19,16 +19,21 @@ def load_data_tf(path):
         class_names=None,
         color_mode="grayscale",
         image_size=(64, 64),
-        shuffle=True,
-        batch_size=8700,
-        seed=123,
-        validation_split=0.2,
-        subset="validation",
+        batch_size=87000,
         interpolation="bilinear",
         follow_links=False,
     )
-    return train_data
 
+    image_batch, label_batch = next(iter(train_data))
+    trainData = image_batch.numpy()
+    trainLabel = label_batch.numpy()
+
+    # row major arranging of 2d array
+    trainData = np.array([x.ravel(order='K') for x in trainData])
+    print("trainData shape ", trainData.shape)
+    trainLabel = trainLabel.reshape(87000, 1)
+    print("trainLabel shape ", trainLabel.shape)
+    return trainData, trainLabel
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
@@ -81,7 +86,6 @@ def load_data(path):
 
     return TrainingImages, TrainingLabels
 
-# return 
 
 # Main function
 if __name__ == '__main__':
@@ -105,16 +109,16 @@ if __name__ == '__main__':
     # TestdataFrame.to_csv('TestdataFrame.csv')
 
     # read data using tf keras dataloader
-    train_data = load_data_tf(path)
-    print(train_data)
-    print(train_data.class_names)
-    image_batch, label_batch = next(iter(train_data))
-    trainData = image_batch.numpy()
-    trainLabel = label_batch.numpy()
-    print("trainData shape ", trainData.shape)
-    print("trainLabel shape ", trainLabel.shape)
-    print(image_batch.shape)
-    print(label_batch.shape)
+    train_data, trainLabels = load_data_tf(path)
+    # print(train_data)
+    # print(train_data.class_names)
+    # image_batch, label_batch = next(iter(train_data))
+    # trainData = image_batch.numpy()
+    # trainLabel = label_batch.numpy()
+    # print("trainData shape ", trainData.shape)
+    # print("trainLabel shape ", trainLabel.shape)
+    # print(image_batch.shape)
+    # print(label_batch.shape)
 
     # display one image from training data
     # image = train_data[0]
