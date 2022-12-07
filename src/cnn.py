@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # %matplotlib inline
 
 train_dir = './input/asl_alphabet_train/asl_alphabet_train'
-test_dir = './input/asl_alphabet_test/asl_alphabet_test'
+test_dir = './input/asl_alphabet_test/asl_UK_test'
 classes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
            'W', 'X', 'Y', 'Z', 'nothing', 'space', 'del']
@@ -53,6 +53,33 @@ def load_data(train_dir):
     return x_train, x_test, y_train, y_test
 
 
+def load_test_data(train_dir):
+    images = []
+    labels = []
+    size = 32, 32
+    index = -1
+    for folder in os.listdir(train_dir):
+        index += 1
+        for image in os.listdir(train_dir + "/" + folder):
+            temp_img = cv2.imread(train_dir + '/' + folder + '/' + image)
+            temp_img = cv2.resize(temp_img, size)
+            images.append(temp_img)
+            labels.append(index)
+
+    images = np.array(images)
+    images = images.astype('float32')/255.0
+    labels = utils.to_categorical(labels)
+    x_train, x_test, y_train, y_test = train_test_split(
+        images, labels, test_size=0.9)
+
+    print('TEST data Loaded', len(x_train), 'images for training,',
+          'Train data shape =', x_train.shape)
+    print('TEST data Loaded', len(x_test), 'images for testing',
+          'Test data shape =', x_test.shape)
+
+    return x_test, y_test
+
+
 start = time()
 x_train, x_test, y_train, y_test = load_data(train_dir)
 print('Loading:', time() - start)
@@ -60,7 +87,7 @@ print('Loading:', time() - start)
 
 classes = 29
 batch = 64
-epochs = 50
+epochs = 1
 learning_rate = 0.001
 
 
@@ -84,6 +111,15 @@ def results(model):
     print('Test accuracy:', test_acc)
     print('Test loss:', test_loss)
     print('Test time: ', test_time)
+
+    testX, testY = load_test_data(test_dir)
+
+    start = time()
+    test_loss, test_acc = model.evaluate(testX, testY)
+    test_time = time() - start
+    print('Test accuracy with my data:', test_acc)
+    print('Test loss with my data:', test_loss)
+    print('Test time with my data: ', test_time)
 
     plt.figure(figsize=(12, 12))
     plt.subplot(3, 2, 1)
