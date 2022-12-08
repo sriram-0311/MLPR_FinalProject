@@ -28,22 +28,26 @@ def draw_decision_tree(X, y):
     print(" number of nodes in tree : ", clf.tree_.max_depth)
 
 # load model and predict
-def load_model_predict(X_test):
+def load_model_predict(X_train, y_train,X_test):
     # load the model from disk
-    loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
+    loaded_model = pickle.load(open('modelwithmaxdepth4.sav', 'rb'))
+    loaded_model.fit(X_train, y_train)
     result = loaded_model.predict(X_test)
+    print(" number of nodes in tree : ", loaded_model.tree_.node_count)
+    print(" number of nodes in tree : ", loaded_model.tree_.max_depth)
     return result
 
 # prune the tree using cross validation score
 def prune_tree(X, y):
     # create a list of values to try for max_depth:
-    max_depth_range = list(range(1, 10))
+    max_depth_range = list(range(1, 5))
     # list to store the average RMSE for each value of max_depth:
     accuracy = []
     for depth in max_depth_range:
         print("depth : ", depth)
         clf = tree.DecisionTreeClassifier(max_depth=depth, random_state=1)
         scores = cross_val_score(clf, X, y, cv=10, scoring='accuracy')
+        pickle.dump(clf, open('modelwithmaxdepth' + str(depth) + '.sav', 'wb'))
         accuracy.append(scores.mean())
     plt.plot(max_depth_range, accuracy)
     plt.xlabel('max_depth')
@@ -102,12 +106,14 @@ if __name__ == '__main__':
     #draw_decision_tree(X_train, y_train)
 
     # prune tree
-    prune_tree(X_train, y_train)
+    #prune_tree(X_train, y_train)
 
     # load model and predict
-    y_pred = load_model_predict(X_test)
+    y_pred = load_model_predict(X_train,y_train,X_test)
     #calculate accuracy
     calculate_accuracy(y_test, y_pred)
+    # load pruned tree model
+    load_pruned_tree_model()
 
     # Show a random image
     # img = df['Image'][np.random.randint(0,len(df['Image']))]

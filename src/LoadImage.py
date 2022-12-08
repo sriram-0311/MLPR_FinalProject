@@ -28,6 +28,9 @@ def load_data_tf(path):
     trainData = image_batch.numpy()
     trainLabel = label_batch.numpy()
 
+    # return as tensorflow dataset
+    
+
     # row major arranging of 2d array
     trainData = np.array([x.ravel(order='K') for x in trainData])
     print("trainData shape ", trainData.shape)
