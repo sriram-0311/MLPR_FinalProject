@@ -26,6 +26,7 @@ X_test = test_data.drop(columns='label')
 # https://www.kaggle.com/code/marioeid/sign-language-mnist-100-accuracy
 ########################################################################
 # GaussianNB model
+start = timeit.default_timer()   
 model = naive_bayes.GaussianNB()
 model.fit(X_train, y_train)
 
@@ -35,26 +36,33 @@ y_pred_1 = model.predict(X_test)
 # accuracy
 print("\n")
 scores = cross_val_score(model, X_train, y_train, cv=5)
+stop = timeit.default_timer()
 print("GaussianNB accuracy: %f" % (scores.mean() * 100))
+print("time:", end - start)
 
 # MultinomialNB model
+start = timeit.default_timer()
 model = naive_bayes.MultinomialNB()
 model.fit(X_train, y_train)
 # predict
 y_pred_2 = model.predict(X_test)
 # accuracy
 scores = cross_val_score(model, X_train, y_train, cv=5)
+stop = timeit.default_timer()
 print("MultinomialNB accuracy: %f" % (scores.mean() * 100))
+print("time:", end - start)
 
 # ComplementNB model
+start = timeit.default_timer()
 model = naive_bayes.ComplementNB()
 model.fit(X_train, y_train)
 # predict
 y_pred_3 = model.predict(X_test)
 # accuracy
 scores = cross_val_score(model, X_train, y_train, cv=5)
+stop = timeit.default_timer()
 print("ComplementNB accuracy: %f" % (scores.mean() * 100))
-
+print("time:", end - start)
 
 ################################################################################
 #                           Logistic Regression
@@ -87,8 +95,10 @@ X_train_hist, y_train_hist = read_file(
     "../../input/sign_mnist_train.csv", hist=True)
 
 # Train model with histogram features
+start = timeit.default_timer()
 histogram_model = LogisticRegression(
     max_iter=10000, solver='lbfgs', multi_class='auto')
 scores = cross_val_score(histogram_model, X_train_hist, y_train_hist, cv=5)
-
+stop = timeit.default_timer()
 print("Logistic-regression accuracy: %f" % (scores.mean() * 100))
+print("time:", end - start)
