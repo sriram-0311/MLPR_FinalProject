@@ -1,4 +1,6 @@
-# EECE 5644 Machine Learning and Patern Recognition_Final Project_Team 5
+# AUTOMATED RECOGNITION OF ENGLISH ASL ALPHABET_EECE5644_FINAL_PROJECT_TEAM 5
+
+
 
 <B>How to run</B>
 
