@@ -1,6 +1,6 @@
 # AUTOMATED RECOGNITION OF ENGLISH ASL ALPHABET_EECE5644_FINAL_PROJECT_TEAM 5
 
-
+![ppt_1](./ppt/ppt_1.png)
 
 <B>How to run</B>
 
